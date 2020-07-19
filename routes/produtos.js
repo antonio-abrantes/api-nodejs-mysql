@@ -2,6 +2,32 @@ const express = require('express');
 const { response } = require('express');
 const router = express.Router();
 const mysql = require('../mysql').pool;
+const multer = require('multer');
+
+const storage = multer.diskStorage({
+  destination: function(req, file, cb){
+    cb(null, './uploads/');
+  },
+  filename: function(req, file, cb){
+    cb(null, new Date().toISOString().replace(/:/g, '-') + "_" +file.originalname);
+  }
+});
+
+const fileFilter = (req, file, cb)=>{
+  if(file.mimetype === 'image/jpeg' || file.mimetype === 'image/jpg'){
+    cb(null, true);
+  }else{
+    cb(null, false);
+  }
+}
+
+const upload = multer({ 
+  storage: storage,
+  limits:{
+    fileSize: 1024 * 1024 * 5
+  },
+  fileFilter: fileFilter 
+});
 
 //Retorna todos os produtos
 router.get('/', (req, res, next) => {
@@ -19,6 +45,7 @@ router.get('/', (req, res, next) => {
               id_produto: prod.id_produto,
               nome: prod.nome,
               preco: prod.preco,
+              imagem_produto: prod.imagem_produto,
               request: {
                 tipo: 'GET',
                 descricao: '',
@@ -34,17 +61,25 @@ router.get('/', (req, res, next) => {
 });
 
 //Insere um produto
-router.post('/', (req, res, next) => {
+router.post('/', upload.single('imagem_produto'), (req, res, next) => {
+
+  if(typeof req.file === 'undefined'){
+    return res.status(404).send({ response: "Arquivo vazio ou formato invalido" });
+  }
+  console.log(req.file.filename);
 
   const produto = {
     nome: req.body.nome,
-    preco: req.body.preco
+    preco: req.body.preco,
+    imagem_produto: req.file.path.replace(/\\/g, '/')
   }
+
+  //return res.status(201).send({ response: produto });
 
   mysql.getConnection((error, conn)=>{
     conn.query(
-      'INSERT INTO produtos (nome, preco) VALUES (?, ?)',
-      [produto.nome, produto.preco],
+      'INSERT INTO produtos (nome, preco, imagem_produto) VALUES (?, ?, ?)',
+      [produto.nome, produto.preco, produto.imagem_produto],
       (error, result, field)=>{
         conn.release();//Importante para liberar a conexão
         if(error){ return res.status(500).send({error: error, response: null}) }
@@ -54,6 +89,7 @@ router.post('/', (req, res, next) => {
             id_produto: result.insertId,
             nome: produto.nome,
             preco: produto.preco,
+            imagem_produto: produto.imagem_produto,
             request: {
               tipo: 'POST',
               descricao: '',
@@ -89,6 +125,7 @@ router.get('/:id_produto', (req, res, next) => {
             id_produto: result[0].id_produto,
             nome: result[0].nome,
             preco: result[0].preco,
+            imagem_produto: result[0].imagem_produto,
             request: {
               tipo: 'GET',
               descricao: '',
