@@ -24,11 +24,15 @@ app.use((req, res, next) => {
   next();
 });
 
+//Rotas
 const rotaProdutos = require('./routes/produtos');
 app.use('/produtos', rotaProdutos);
 
 const rotaPedidos = require('./routes/pedidos');
 app.use('/pedidos', rotaPedidos);
+
+const rotaUsuarios = require('./routes/usuarios');
+app.use('/usuarios', rotaUsuarios);
 
 //Rota de erro
 app.use((req, res, next) => {
