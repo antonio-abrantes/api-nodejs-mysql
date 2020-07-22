@@ -3,6 +3,10 @@
  - npm install --save body-parser
  - npm install --save mysql
 
+ ### Autenticação
+ - npm install bcrypt@3.0.7 --save
+ - npm install jsonwebtoken@8.5.1 --save
+
  ### Upload de imagens
   - npm install --save multer@1.4.2
   ```
