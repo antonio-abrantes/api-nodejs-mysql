@@ -30,7 +30,7 @@ exports.getPedidos = (req, res, next) => {
               request: {
                 tipo: 'GET',
                 descricao: '',
-                url: 'http://localhost:3333/produtos/'+pedido.id_produto
+                url: process.env.URL_API+'produtos/'+pedido.id_produto
               }
             }
           })
@@ -70,7 +70,7 @@ exports.postPedidos = (req, res, next) => {
                 request: {
                   tipo: 'POST',
                   descricao: '',
-                  url: 'http://localhost:3333/pedidos'
+                  url: process.env.URL_API+'pedidos'
                 } 
               }
             }
@@ -106,7 +106,7 @@ exports.getPedidoPorId = (req, res, next) => {
             request: {
               tipo: 'GET',
               descricao: '',
-              url: 'http://localhost:3333/produtos'
+              url: process.env.URL_API+'produtos'
             } 
           }
         }
@@ -131,7 +131,7 @@ exports.deletePedido = (req, res, next) => {
           request: {
             tipo: 'POST',
             descricao: '',
-            url: 'http://localhost:3333/pedidos',
+            url: process.env.URL_API+'pedidos',
             body:{
               "id_produto": "Number",
               "quantidade": "Number"

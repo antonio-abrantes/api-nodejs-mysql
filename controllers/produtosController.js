@@ -19,7 +19,7 @@ exports.getProdutos = (req, res, next) => {
               request: {
                 tipo: 'GET',
                 descricao: '',
-                url: 'http://localhost:3333/produtos/'+prod.id_produto
+                url: process.env.URL_API+'produtos/'+prod.id_produto
               }
             }
           })
@@ -62,7 +62,7 @@ exports.postProdutos = (req, res, next) => {
             request: {
               tipo: 'POST',
               descricao: '',
-              url: 'http://localhost:3333/produtos'
+              url: process.env.URL_API+'produtos'
             } 
           }
         }
@@ -97,7 +97,7 @@ exports.getProdutoPorId = (req, res, next) => {
             request: {
               tipo: 'GET',
               descricao: '',
-              url: 'http://localhost:3333/produtos'
+              url: process.env.URL_API+'produtos'
             } 
           }
         }
@@ -130,7 +130,7 @@ exports.updateProduto = (req, res, next) => {
             request: {
               tipo: 'GET',
               descricao: '',
-              url: 'http://localhost:3333/produtos'
+              url: process.env.URL_API+'produtos'
             } 
           }
         }
@@ -155,7 +155,7 @@ exports.deleteProduto = (req, res, next) => {
           request: {
             tipo: 'POST',
             descricao: '',
-            url: 'http://localhost:3333/produtos',
+            url: process.env.URL_API+'produtos',
             body:{
               "nome": "String",
               "preco": "Number"
